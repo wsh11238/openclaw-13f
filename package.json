@@ -1,0 +1,14 @@
+{
+  "name": "13f-ustk-pages",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "update:data": "node scripts/update-data.mjs",
+    "build": "node scripts/build.mjs",
+    "deploy:pages": "wrangler pages deploy ./dist"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}
