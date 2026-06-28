@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ETF 风控驾驶舱 6.2 指数图表版</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="assets_data.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div>
+        <h1>ETF 风控驾驶舱</h1>
+        <p>指数选项卡、指标图表、数据源共识与风险预算一屏查询。</p>
+      </div>
+      <div class="topbar-meta">
+        <span>静态版 6.2</span>
+        <span id="dataTime">数据时间 -</span>
+      </div>
+    </header>
+
+    <nav class="workspace-tabs" aria-label="功能区">
+      <button class="workspace-tab active" data-view="indices">指数指标</button>
+      <button class="workspace-tab" data-view="overview">全局雷达</button>
+      <button class="workspace-tab" data-view="portfolio">组合体检</button>
+      <button class="workspace-tab" data-view="report">周报预览</button>
+    </nav>
+
+    <main>
+      <section id="indicesView" class="view active">
+        <div class="index-toolbar">
+          <div class="category-tabs" id="categoryTabs" aria-label="指数分类"></div>
+          <label class="search-box">
+            <span>搜索</span>
+            <input id="assetSearch" type="search" placeholder="输入指数、ETF 代码或类型" />
+          </label>
+        </div>
+
+        <div class="index-tabs" id="indexTabs" aria-label="指数选项卡"></div>
+
+        <section class="detail-grid">
+          <article class="panel hero-panel">
+            <div class="asset-heading">
+              <div>
+                <p class="eyebrow" id="assetType">-</p>
+                <h2 id="assetName">请选择指数</h2>
+                <p id="assetCodes" class="muted">-</p>
+              </div>
+              <span id="assetAlert" class="status-pill gray">-</span>
+            </div>
+
+            <div class="kpi-grid">
+              <div class="kpi-card">
+                <span>综合风险分</span>
+                <strong id="riskScore">-</strong>
+                <small id="riskTrend">-</small>
+              </div>
+              <div class="kpi-card">
+                <span>机会分</span>
+                <strong id="opportunityScore">-</strong>
+                <small>估值、情绪、盈利综合</small>
+              </div>
+              <div class="kpi-card">
+                <span>数据覆盖率</span>
+                <strong id="coveragePct">-</strong>
+                <small id="coverageNote">-</small>
+              </div>
+              <div class="kpi-card">
+                <span>风险预算上限</span>
+                <strong id="targetPosition">-</strong>
+                <small id="actionText">-</small>
+              </div>
+            </div>
+          </article>
+
+          <article class="panel chart-panel">
+            <div class="panel-title">
+              <h3>模块风险图</h3>
+              <span>0 低风险 / 100 高风险</span>
+            </div>
+            <div id="moduleChart" class="module-chart"></div>
+          </article>
+
+          <article class="panel wide">
+            <div class="panel-title">
+              <h3>各项指标风险分</h3>
+              <span>点击任一指标查看来源明细</span>
+            </div>
+            <div id="metricBars" class="metric-bars"></div>
+          </article>
+
+          <aside class="panel evidence-panel">
+            <div class="panel-title">
+              <h3>指标详情</h3>
+              <span id="selectedMetricName">-</span>
+            </div>
+            <div id="metricInspector" class="metric-inspector"></div>
+          </aside>
+
+          <article class="panel wide">
+            <div class="panel-title">
+              <h3>数据源与证据链</h3>
+              <span id="sourceSummary">-</span>
+            </div>
+            <div id="sourceTable" class="table-wrap"></div>
+          </article>
+
+          <aside class="panel evidence-panel">
+            <div class="panel-title">
+              <h3>触发依据</h3>
+              <span id="hardTriggerCount">-</span>
+            </div>
+            <ul id="evidenceList" class="evidence-list"></ul>
+          </aside>
+        </section>
+      </section>
+
+      <section id="overviewView" class="view">
+        <section class="summary-grid">
+          <div class="summary-card"><span>指数数量</span><strong id="summaryCount">-</strong></div>
+          <div class="summary-card"><span>平均风险</span><strong id="summaryRisk">-</strong></div>
+          <div class="summary-card"><span>防守/减仓</span><strong id="summaryDefense">-</strong></div>
+          <div class="summary-card"><span>需要复核</span><strong id="summaryReview">-</strong></div>
+          <div class="summary-card"><span>高机会候选</span><strong id="summaryOpportunity">-</strong></div>
+        </section>
+        <section class="panel">
+          <div class="panel-title">
+            <h3>全指数风险分布</h3>
+            <span>按风险分从高到低排序</span>
+          </div>
+          <div id="overviewChart" class="overview-chart"></div>
+        </section>
+      </section>
+
+      <section id="portfolioView" class="view">
+        <section class="portfolio-grid">
+          <article class="panel">
+            <div class="panel-title">
+              <h3>组合持仓</h3>
+              <span>格式：指数,金额,备注</span>
+            </div>
+            <textarea id="portfolioText">沪深300,50000
+中证500,30000
+创业板指,20000</textarea>
+            <button id="portfolioRun" class="primary-btn">保存并体检</button>
+          </article>
+          <article class="panel">
+            <div class="panel-title">
+              <h3>组合风险摘要</h3>
+              <span id="portfolioMatched">-</span>
+            </div>
+            <div id="portfolioSummary" class="portfolio-summary">等待计算。</div>
+          </article>
+        </section>
+        <section class="panel">
+          <div class="panel-title">
+            <h3>风险贡献</h3>
+            <span>按风险贡献排序</span>
+          </div>
+          <div id="portfolioTable" class="table-wrap"></div>
+        </section>
+      </section>
+
+      <section id="reportView" class="view">
+        <section class="panel">
+          <div class="panel-title">
+            <h3>每周投资体检报告</h3>
+            <button id="reportBtn" class="primary-btn small">生成</button>
+          </div>
+          <pre id="reportBox" class="report-box">等待生成。</pre>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
